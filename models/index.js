@@ -25,7 +25,7 @@ Product.belongsToMany(Tag, {
 });
 // Tags can belong to many products through the product tag junction table
 Tag.belongsToMany(Product, {
-  through: {model: ProductTag, unique: falsem, sourceKey: 'tag_id', targetKey: 'product_id' },
+  through: {model: ProductTag, unique: false, sourceKey: 'tag_id', targetKey: 'product_id' },
 });
 
 
