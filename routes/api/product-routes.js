@@ -38,15 +38,16 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const newProduct = await Product.create(req.body);
-    if (req.body.tagIds.length) {
-      const productTagIdArr = req.body.tag_id.map((tagID) => {
+    console.log(req.body)
+    if (req.body.tagIds && req.body.tagIds.length) {
+      const productTagIdArr = req.body.tagIds.map((tag_id) => {
         return {
-          product_id: product.id,
-          tagID,
+          product_id: newProduct.id,
+          tag_id
         };
       });
       console.log(productTagIdArr)
-      return ProductTag.bulkCreate(productTagIdArr);
+      const newTags = await ProductTag.bulkCreate(productTagIdArr);
     }
     res.status(200).json(newProduct);
   } catch (err) {
@@ -55,7 +56,7 @@ router.post('/', async (req, res) => {
 })
 
 
-// update product
+// updates a product removes tags not included in the tagIds array, and adds new ones
 router.put('/:id', (req, res) => {
   // update product data
   Product.update(req.body, {
@@ -96,9 +97,24 @@ router.put('/:id', (req, res) => {
       res.status(400).json(err);
     });
 });
-
-router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
+//Deletes a product and the tag relationships to that deleted product
+router.delete('/:id', async (req, res) => {
+    try{
+      const deletedProduct= await Product.destroy({
+        where: {
+          id: req.params.id,
+        },
+      })
+      const deletedTagRelationship= await ProductTag.destroy({
+        where: {
+          product_id: req.params.id,
+        },
+      })
+      res.status(200).json(deletedProduct);
+    }
+  catch(err){
+   res.status(500).json(err); 
+  }
 });
 
 module.exports = router;
