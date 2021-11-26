@@ -15,4 +15,4 @@ https://watch.screencastify.com/v/IuqIp8S6qad9KiS82Sab
 https://watch.screencastify.com/v/YnHcVEM4LCeK9fQ8rkcv
 
 ## Screenshots
-![Image output](./Assets/Insomnia.png)
+![Image output](./Assets/Insomnia.PNG)
